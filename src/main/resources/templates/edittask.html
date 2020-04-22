@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Edit task</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"
+	th:href="@{css/bootstrap.min.css}" />
+</head>
+<body>
+	<h1>Edit task</h1>
+	<div>
+		<form th:object="${task}" th:action="@{../savetask}" action="#" method="post">
+			<label for="id"></label> <input type="hidden" id="id"
+				th:field="*{id}" class="form-control" />
+			<label for="title">Title</label> 
+				<input style="margin: 10px;" type="text" id="title" th:field="*{title}" /> 
+				<br /> 
+			<label for="author">Description</label> 
+				<input style="margin: 10px;" type="text" id="description" th:field="*{description}" /> 
+				<br /> 
+			<label for="deadline">Deadline</label>
+				<input style="margin: 10px;" type="date" th:field="*{deadline}" /> 
+				<br />
+
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="statuslist">Status</label> 
+				<select id="statuslist" th:field="*{status}" class="form-control">
+					<option th:each="status: ${statuses}"
+						th:value="${status.statusid}" th:text="${status.title}"></option>
+				</select>
+			
+			<label for="assigneelist">Assignee</label> 
+				<select id="assigneelist" th:field="*{assignee}" class="form-control">
+					<option th:each="assignee: ${assignees}"
+						th:value="${assignee.assigneeid}" th:text="${assignee.name}"></option>
+				</select>
+
+			<div style="clear: both; display: block; height: 10px;"></div>
+
+			<input type="submit" value="Save"></input>
+		</form>
+	</div>
+</body>
+</html>

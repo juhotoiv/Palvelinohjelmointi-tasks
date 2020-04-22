@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Add a new assignee</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"
+	th:href="@{css/bootstrap.min.css}" />
+</head>
+<body>
+	<h1>Add assignee</h1>
+	<div>
+		<form th:object="${assignee}" th:action="@{saveassignee}" action="#" method="post">
+			<label for="title">Name</label> 
+				<input style="margin: 10px;" type="text" id="name" th:field="*{name}" /> 
+				<br /> 
+			
+			<div style="clear: both; display: block; height: 10px;"></div>
+
+			<input type="submit" value="Save"></input>
+		</form>
+	</div>
+</body>
+</html>

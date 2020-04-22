@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<title>Task list page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+
+</head>
+<body>
+	<h1 th:text="${'All tasks for assignee ' + assignee.name}" style="padding: 10px; ">Assignee UNKNOWN's tasks</h1>
+	<a style="margin: 1em;" href="../tasklist" class="btn btn-success">Back to homepage</a>
+	<a sec:authorize="hasAuthority('ADMIN')"  style="margin: 1em;" class="btn btn-danger" th:href="@{/deleteassignee/{id}(id=${assignee.assigneeid})}">Delete assignee and all their tasks</a>
+	
+	<table class="table table-striped">
+		<tr>
+			<th>Title</th>
+			<th>Description</th>
+			<th>Deadline</th>
+			<th>Status</th>
+			<th></th>
+			<th></th>
+		</tr>
+		
+		<tr th:each="task : ${tasks}">
+			<td th:text="${task.title}"></td>
+			<td th:text="${task.description}"></td>
+			<td th:text="${task.deadline}"></td>
+			<td th:text="${task.status.title}"></td>
+			<td sec:authorize="hasAuthority('ADMIN')" ><a class="btn btn-danger" th:href="@{/delete/{id}(id=${task.id})}">Delete</a></td>
+			<td><a class="btn btn-warning" th:href="@{/edit/{id}(id=${task.id})}">Edit</a></td>
+		</tr>
+	</table>
+	
+	<form th:action="@{addtask}" action="#" method="post" style="margin: 1em;">
+		<input type="submit" value="Add Task" class="btn btn-success"></input>
+	</form>
+	
+</body>
+</html>

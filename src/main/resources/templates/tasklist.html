@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+<title>Task list page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+<style>
+	
+	strong {
+		margin: 1em;
+	}
+	
+	.todo > tbody > tr > th {
+   		background-color: #F5B7B1;
+	}
+	
+	.work > tbody > tr > th {
+   		background-color: #F5D9B1;
+	}
+	
+	.review > tbody > tr > th {
+   		background-color: #EFF5B1;
+	}
+	
+	.done > tbody > tr > th {
+   		background-color: #B1F5B7;
+	}
+	
+	.top-menu {
+		width: 100%;
+		background-color: blue;
+	}
+	
+	h1 {
+		display: inline-block;
+		float: left;
+		margin: 1em;
+	}
+	
+	.sign-out {
+		display: inline-block;
+		float: right;
+		margin: 1em;
+	}
+	
+	.list-inline {
+		list-style: none;
+		display:inline-block;
+		float: bottom;
+		margin-top: 1em;
+		margin-left: -0.5em;
+		margin-right: -0.5em;
+		padding-left: 1em;
+	}
+	
+	.list-inline > li {
+		display: inline-block;
+		margin-left: 0.5em;
+		margin-right: 0.5em;
+	}
+	
+	.list-inline > li > a{
+		display: inline-block;
+	}
+	
+	
+</style>
+</head>
+<body>
+	<div id="top-menu">
+		<h1>All tasks, logged in as [[${#httpServletRequest.remoteUser}]]</h1>
+
+		<div class="sign-out">
+			<form th:action="@{/logout}" method="post">
+				<input type="submit" value="Sign Out" class="btn btn-sm btn-danger"/>
+			</form>
+		</div>
+		
+		<ul class="list-inline">
+			<li>Assignees: <li>
+			<li th:each="assignee : ${assignees}"><a th:href="@{/assignee(name=${assignee.name})}" class="btn btn-primary" th:text="${assignee.name}"></a></li>
+			<li><form th:action="@{addassignee}" action="#" method="post">
+			<input type="submit" value="Add Assignee" class="btn btn-success"></input></form></li>
+			<li><form th:action="@{addtask}" action="#" method="post">
+				<input type="submit" value="Add Task" class="btn btn-success"></input>
+				</form></li>
+		</ul>
+	</div>
+	
+	<div id="to-do-items">
+		<strong>Tasks to do</strong>
+		<table class="table table-striped todo">
+			<tr>
+				<th>Title</th>
+				<th>Description</th>
+				<th>Deadline</th>
+				<th>Assignee</th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr th:each="task : ${tasks}" th:if="${task.status.title == 'To do'}">
+				<td th:text="${task.title}"></td>
+				<td th:text="${task.description}"></td>
+				<td th:text="${task.deadline}"></td>
+				<td th:text="${task.assignee.name}"></td>
+				<td sec:authorize="hasAuthority('ADMIN')"><a class="btn btn-danger" th:href="@{/deletetask/{id}(id=${task.id})}">Delete</a></td>
+				<td><a class="btn btn-warning" th:href="@{/edit/{id}(id=${task.id})}">Edit</a></td>
+			</tr>
+		</table>
+	</div>
+	
+	<div id="working-on-items">
+		<strong>Tasks under work</strong>
+		<table class="table table-striped work">
+			<tr>
+				<th>Title</th>
+				<th>Description</th>
+				<th>Deadline</th>
+				<th>Assignee</th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr th:each="task : ${tasks}" th:if="${task.status.title == 'Working on'}">
+				<td th:text="${task.title}"></td>
+				<td th:text="${task.description}"></td>
+				<td th:text="${task.deadline}"></td>
+				<td th:text="${task.assignee.name}"></td>
+				<td sec:authorize="hasAuthority('ADMIN')"><a class="btn btn-danger" th:href="@{/deletetask/{id}(id=${task.id})}">Delete</a></td>
+				<td><a class="btn btn-warning" th:href="@{/edit/{id}(id=${task.id})}">Edit</a></td>
+			</tr>
+		</table>
+	</div>
+	
+	<div id="to-be-reviewed-items">
+		<strong>Tasks to be reviewed</strong>
+		<table class="table table-striped review">
+			<tr>
+				<th>Title</th>
+				<th>Description</th>
+				<th>Deadline</th>
+				<th>Assignee</th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr th:each="task : ${tasks}" th:if="${task.status.title == 'To be reviewed'}">
+				<td th:text="${task.title}"></td>
+				<td th:text="${task.description}"></td>
+				<td th:text="${task.deadline}"></td>
+				<td th:text="${task.assignee.name}"></td>
+				<td sec:authorize="hasAuthority('ADMIN')"><a class="btn btn-danger" th:href="@{/deletetask/{id}(id=${task.id})}">Delete</a></td>
+				<td><a class="btn btn-warning" th:href="@{/edit/{id}(id=${task.id})}">Edit</a></td>
+			</tr>
+		</table>
+	</div>
+	
+	<div id="done-items">
+		<strong>Finished tasks</strong>
+		<table class="table table-striped done">
+			<tr>
+				<th>Title</th>
+				<th>Description</th>
+				<th>Deadline</th>
+				<th>Assignee</th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr th:each="task : ${tasks}" th:if="${task.status.title == 'Done'}">
+				<td th:text="${task.title}"></td>
+				<td th:text="${task.description}"></td>
+				<td th:text="${task.deadline}"></td>
+				<td th:text="${task.assignee.name}"></td>
+				<td sec:authorize="hasAuthority('ADMIN')"><a class="btn btn-danger" th:href="@{/deletetask/{id}(id=${task.id})}">Delete</a></td>
+				<td><a class="btn btn-warning" th:href="@{/edit/{id}(id=${task.id})}">Edit</a></td>
+			</tr>
+		</table>
+	</div>
+	
+	
+	
+	
+</body>
+</html>
