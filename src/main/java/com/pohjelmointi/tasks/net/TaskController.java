@@ -106,7 +106,7 @@ public class TaskController {
 	public String showTaskList(@RequestParam String name, Model model) {
 		model.addAttribute("assignee", arepository.findByName(name).get(0));
 		model.addAttribute("tasks", trepository.findByAssignee(arepository.findByName(name).get(0)));
-		return "/assigneeslist";
+		return "../assigneeslist";
 	}
 	
 	// RESTful service to get all tasks
