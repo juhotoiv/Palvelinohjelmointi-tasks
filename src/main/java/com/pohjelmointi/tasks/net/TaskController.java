@@ -1,6 +1,7 @@
 package com.pohjelmointi.tasks.net;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.pohjelmointi.tasks.domain.*;
 
@@ -77,7 +78,7 @@ public class TaskController {
 	}
 	
 	// Delete a task
-	// TODO @PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/deletetask/{id}", method = RequestMethod.GET)
 	public String deleteTask(@PathVariable("id") Long taskId, Model model) {
 		trepository.deleteById(taskId);
@@ -85,7 +86,7 @@ public class TaskController {
 	}
 	
 	// Delete an assignee
-	// TODO @PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/deleteassignee/{id}", method = RequestMethod.GET)
 	public String deleteAssignee(@PathVariable("id") Long assigneeId, Model model) {
 		arepository.deleteById(assigneeId);
